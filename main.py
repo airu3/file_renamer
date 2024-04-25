@@ -1,6 +1,18 @@
 import os
 from datetime import datetime
 
+"""
+前方部分一致でリネームできるようにしたい
+B: typing-2021-0615-1234.png
+A: typing_2021-0615-1234.png
+
+入力してファイルの新しい名前を指定できるようにしたい
+B: typing-2021-0615-1234.png
+A: input()-2021-0615-1234.png
+保存先のフォルダ変更機能を削除したい
+
+"""
+
 
 def get_files(src_folder, file_name):
     """指定したフォルダから指定した名前を含むファイルのリストを取得する"""
@@ -41,25 +53,22 @@ def rename_files(src_folder, dst_folder, files):
             (dst_folder[:20] + "...") if len(dst_folder) > 20 else dst_folder
         )
         print(
-            f"ファイル'{file}'を'{new_file_name}'にリネームし、'{dst_folder_display}'に移動しました。"
+            f"ファイル '{file}' を '{new_file_name}' にリネームし、 '{dst_folder_display}' に移動しました。"
         )
 
 
 def main():
     print("ファイルのリネームを開始します。")
     # ユーザーにフォルダパスを入力させる
-    src_folder = input("検索するフォルダパスを入力してください: ")
-
-    # 保存先フォルダを指定
-    dst_folder = src_folder
-
+    src_folder = input("Enter the 'path' to search: ")
     # ユーザーに検索ファイル名を入力させる
-    file_name = input("検索するファイル名を入力してください: ")
+    file_name = input("Enter the 'file' to search: ")
 
     # スクリーンショットファイルのリストを取得
     screenshot_files = get_files(src_folder, file_name)
+
     # スクリーンショットファイルをリネーム
-    rename_files(src_folder, dst_folder, screenshot_files)
+    rename_files(src_folder, src_folder, screenshot_files)
     print("処理が完了しました。")
 
 
