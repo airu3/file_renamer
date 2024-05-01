@@ -23,7 +23,7 @@ def get_files(src_folder, file_name):
     return files
 
 
-def rename_files(src_folder, dst_folder, files):
+def rename_files(src_folder, files, new_file_prefix):
     """ファイルを新しい名前でリネームする"""
     for file in files:
         # ファイルのパスを作成
@@ -31,34 +31,25 @@ def rename_files(src_folder, dst_folder, files):
         # ファイルの作成日時を取得
         creation_time = os.path.getctime(src_path)
         # ファイルの作成日時からファイル名を作成
-        formatted_time = datetime.fromtimestamp(creation_time).strftime(
-            "typing-%Y-%m%d-%H%M"
-        )
+        formatted_time = datetime.fromtimestamp(creation_time).strftime("%Y-%m%d-%H%M")
 
-        counter = 1
-        new_file_name = f"{formatted_time}.png"
+        new_file_name = f"{new_file_prefix}{formatted_time}.png"
         # 保存先ファイルのパスを作成
-        dst_path = os.path.join(dst_folder, new_file_name)
+        dst_path = os.path.join(src_folder, new_file_name)
 
-        # 既に同名のファイルが存在する場合は、ファイル名に連番を付ける
-        while os.path.exists(dst_path):
-            new_file_name = f"{formatted_time} ({counter}).png"
-            dst_path = os.path.join(dst_folder, new_file_name)
-            counter += 1
-
-        # ファイルをリネームして移動
-        os.rename(src_path, dst_path)
+        # ファイルをリネーム
+        os.replace(src_path, dst_path)
         # 20文字以上の場合は省略して表示
-        dst_folder_display = (
-            (dst_folder[:20] + "...") if len(dst_folder) > 20 else dst_folder
+        src_folder_display = (
+            (src_folder[:20] + "...") if len(src_folder) > 20 else src_folder
         )
         print(
-            f"ファイル '{file}' を '{new_file_name}' にリネームし、 '{dst_folder_display}' に移動しました。"
+            f"ファイル '{file}' を '{new_file_name}' にリネームしました。保存先は '{src_folder_display}' です。"
         )
 
 
 def main():
-    print("ファイルのリネームを開始します。")
+    print("Start file renaming process...")
     # ユーザーにフォルダパスを入力させる
     src_folder = input("Enter the 'path' to search: ")
     # ユーザーに検索ファイル名を入力させる
@@ -67,9 +58,12 @@ def main():
     # スクリーンショットファイルのリストを取得
     screenshot_files = get_files(src_folder, file_name)
 
+    # ユーザーに新しいファイル名を入力させる
+    new_file_prefix = input("Enter the 'new file name' to rename: ")
+
     # スクリーンショットファイルをリネーム
-    rename_files(src_folder, src_folder, screenshot_files)
-    print("処理が完了しました。")
+    rename_files(src_folder, screenshot_files, new_file_prefix)
+    print("File renaming process is complete.")
 
 
 # このスクリプトを直接実行する場合にのみmain関数を呼び出す
