@@ -14,12 +14,19 @@ A: input()-2021-0615-1234.png
 """
 
 
+def truncate_string(input_string, length, append_string="..."):
+    """文字列を指定した長さに切り詰め、必要に応じて文字を追加する"""
+    if len(input_string) > length:
+        return input_string[:length] + append_string
+    else:
+        return input_string
+
+
 def get_files(src_folder, file_name):
     """指定したフォルダから指定した名前を含むファイルのリストを取得する"""
     files = [file for file in os.listdir(src_folder) if file_name in file]
-    print(
-        f"'{file_name}'を含むファイルを{len(files)}件、{src_folder}から見つけました。"
-    )
+    src_folder_display = truncate_string(src_folder, 20, "...")
+    print(f"Found {len(files)} files containing '{file_name}' in {src_folder_display}.")
     return files
 
 
@@ -40,11 +47,9 @@ def rename_files(src_folder, files, new_file_prefix):
         # ファイルをリネーム
         os.replace(src_path, dst_path)
         # 20文字以上の場合は省略して表示
-        src_folder_display = (
-            (src_folder[:20] + "...") if len(src_folder) > 20 else src_folder
-        )
+        src_folder_display = truncate_string(src_folder, 20, "...")
         print(
-            f"ファイル '{file}' を '{new_file_name}' にリネームしました。保存先は '{src_folder_display}' です。"
+            f"Renamed file '{file}' to '{new_file_name}'. It is saved in '{src_folder_display}'."
         )
 
 
