@@ -12,7 +12,7 @@ def truncate_string(input_string, length, append_string="..."):
         return input_string
 
 
-"""指定したフォルダから指定した名前を含むファイルのリストを取得する"""
+"""指定パスから指定した名前を含むファイルのリストを取得する"""
 
 
 def get_files(src_folder, file_name):
@@ -34,16 +34,20 @@ def get_formatted_time(src_path, file, date_format):
 """ファイルを新しい名前でリネームする"""
 
 
-def rename_files(src_path, files, new_file_prefix):
+def rename_files_with_timestamp(src_path, files, new_file_prefix):
     for file in files:
+        # ファイルの作成日時を取得し、指定したフォーマットで返す
         formatted_time = get_formatted_time(src_path, file, "%Y-%m%d-%H%M%S")
-
+        # 新しいファイル名を作成
         new_file_name = f"{new_file_prefix}{formatted_time}.png"
-        # 保存先ファイルのパスを作成
-        dst_path = os.path.join(src_path, new_file_name)
+
+        # 現在のファイルのパスと名前を作成
+        old_path_and_name = os.path.join(src_path, file)
+        # 新規のファイルのパスと名前を作成
+        new_path_and_name = os.path.join(src_path, new_file_name)
 
         # ファイルをリネーム
-        os.replace(src_path, dst_path)
+        os.replace(old_path_and_name, new_path_and_name)
         # 20文字以上の場合は省略して表示
         src_path_display = truncate_string(src_path, 20, "...")
         print(
@@ -61,14 +65,14 @@ def main():
     # ユーザーに検索ファイル名を入力させる
     file_name = input("Enter the 'file' to search: ")
 
-    # スクリーンショットファイルのリストを取得
-    screenshot_files = get_files(src_path, file_name)
+    # ファイルのリストを取得
+    files = get_files(src_path, file_name)
 
     # ユーザーに新しいファイル名を入力させる
-    new_file_prefix = input("Enter the 'new file name' to rename: ")
+    new_file_prefix = input("Enter the 'new file prefix' to rename: ")
 
     # スクリーンショットファイルをリネーム
-    rename_files(src_path, screenshot_files, new_file_prefix)
+    rename_files_with_timestamp(src_path, files, new_file_prefix)
     print("File renaming process is complete.")
 
 
