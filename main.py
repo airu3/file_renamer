@@ -16,6 +16,7 @@ def truncate_string(input_string, length, append_string="..."):
 
 
 def get_files(src_folder, file_name):
+    # 指定したフォルダ内のファイルを取得し、指定した名前を含むファイルのリストを作成
     files = [file for file in os.listdir(src_folder) if file_name in file]
     src_folder_display = truncate_string(src_folder, 20, "...")
     print(f"Found {len(files)} files containing '{file_name}' in {src_folder_display}.")
@@ -26,8 +27,8 @@ def get_files(src_folder, file_name):
 
 
 def get_formatted_time(src_path, file, date_format):
-    src_path = os.path.join(src_path, file)
-    creation_time = os.path.getctime(src_path)
+    path_and_name = os.path.join(src_path, file)
+    creation_time = os.path.getctime(path_and_name)
     return datetime.fromtimestamp(creation_time).strftime(date_format)
 
 
